@@ -102,6 +102,11 @@ function fileLoader(fileOrDirectory) { //callback on image upload
           document.querySelector('.create-label .label-list').addEventListener('change', onPopupLabelClick);
           document.querySelector('#labels-menu .list-items').addEventListener('dblclick', onLabelDblClick);
           document.querySelector('#file-menu .list-items').addEventListener('change', onFileClick);
+          //Connection to AWS
+          document.querySelector('#upload-data').addEventListener('click', () => {
+            uploadImages();
+            uploadAnnotations();
+          });
           currCanvasState = canvasStates[0];
           startSlide(); //Initialize the slider after load
         }
