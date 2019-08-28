@@ -7,6 +7,8 @@ window.addEventListener('load', () => {
   document.querySelector('.cancel-label').addEventListener('click', cancelLabel);
   document.querySelector('#cancel-training-job').addEventListener('click', closeParamsModal);
   document.querySelector('#submit-training-job').addEventListener('click', throttle(createTrainingJob, 7000));
+  document.querySelector('#cancel-endpoint').addEventListener('click', closeEndpointModal);
+  document.querySelector('#submit-endpoint').addEventListener('click', throttle(createEndpoint, 7000));
   //File and slider loading
   document.querySelector('#file-load').addEventListener('change', fileLoader.bind(null, 'file'));
   document.querySelector('#directory-load').addEventListener('change', fileLoader.bind(null, 'directory'));
