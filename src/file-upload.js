@@ -107,6 +107,7 @@ function fileLoader(fileOrDirectory) { //callback on image upload
             uploadImages();
             uploadAnnotations();
           }, 7000));
+          document.querySelector('#create-training-job').addEventListener('click', openParamsModal);
           currCanvasState = canvasStates[0];
           startSlide(); //Initialize the slider after load
         }
