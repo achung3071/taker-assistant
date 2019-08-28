@@ -97,6 +97,11 @@ function fileLoader(fileOrDirectory) { //callback on image upload
           document.querySelector('#next-image').addEventListener('click', () => {
             if (allSlides[current].style.display === 'block') slideRight();
           });
+          //Click labels and files on right menu and popup
+          document.querySelector('#labels-menu .list-items').addEventListener('change', onLabelClick);
+          document.querySelector('.create-label .label-list').addEventListener('change', onPopupLabelClick);
+          document.querySelector('#labels-menu .list-items').addEventListener('dblclick', onLabelDblClick);
+          document.querySelector('#file-menu .list-items').addEventListener('change', onFileClick);
           currCanvasState = canvasStates[0];
           startSlide(); //Initialize the slider after load
         }

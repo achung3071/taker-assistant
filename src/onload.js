@@ -3,6 +3,8 @@ window.addEventListener('load', () => {
   //UI Elements Setup
   resizeContent();
   window.addEventListener('resize', resizeContent);
+  document.querySelector('.confirm-label').addEventListener('click', confirmLabel);
+  document.querySelector('.cancel-label').addEventListener('click', cancelLabel);
   //File and slider loading
   document.querySelector('#file-load').addEventListener('change', fileLoader.bind(null, 'file'));
   document.querySelector('#directory-load').addEventListener('change', fileLoader.bind(null, 'directory'));
