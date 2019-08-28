@@ -103,10 +103,10 @@ function fileLoader(fileOrDirectory) { //callback on image upload
           document.querySelector('#labels-menu .list-items').addEventListener('dblclick', onLabelDblClick);
           document.querySelector('#file-menu .list-items').addEventListener('change', onFileClick);
           //Connection to AWS
-          document.querySelector('#upload-data').addEventListener('click', () => {
+          document.querySelector('#upload-data').addEventListener('click', throttle(() => {
             uploadImages();
             uploadAnnotations();
-          });
+          }, 7000));
           currCanvasState = canvasStates[0];
           startSlide(); //Initialize the slider after load
         }
