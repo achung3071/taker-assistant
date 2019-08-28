@@ -109,6 +109,8 @@ function fileLoader(fileOrDirectory) { //callback on image upload
           }, 7000));
           document.querySelector('#create-training-job').addEventListener('click', openParamsModal);
           document.querySelector('#create-endpoint').addEventListener('click', throttle(openEndpointModal, 7000));
+          document.querySelector('#get-predictions').addEventListener('click', throttle(openPredsModal, 7000));
+          document.querySelector('#clear-predictions').addEventListener('click', clearPreds);
           currCanvasState = canvasStates[0];
           startSlide(); //Initialize the slider after load
         }

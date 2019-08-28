@@ -9,6 +9,8 @@ window.addEventListener('load', () => {
   document.querySelector('#submit-training-job').addEventListener('click', throttle(createTrainingJob, 7000));
   document.querySelector('#cancel-endpoint').addEventListener('click', closeEndpointModal);
   document.querySelector('#submit-endpoint').addEventListener('click', throttle(createEndpoint, 7000));
+  document.querySelector('#cancel-prediction').addEventListener('click', closePredsModal);
+  document.querySelector('#submit-prediction').addEventListener('click', throttle(makeInference, 7000));
   //File and slider loading
   document.querySelector('#file-load').addEventListener('change', fileLoader.bind(null, 'file'));
   document.querySelector('#directory-load').addEventListener('change', fileLoader.bind(null, 'directory'));
