@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.511.0/aws-sdk.js"></script>
+  <script src="../src/canvas-classes.js"></script>
+  <script src="../src/aws-train.js"></script>
+  <script src="../src/label-menu.js"></script>
+  <script src="../src/onload.js"></script>
+  <script src="../src/aws-config.js"></script>
+  <script src="../src/file-upload.js"></script>
+  <script src="../src/s3-annotations.js"></script>
+  <script src="../src/endpoint.js"></script>
+  <script src="../src/detect-objects.js"></script>
+  <script src="../src/throttle.js"></script>
+  <script src="classes.js"></script>
+  <title>Taker Assistant</title>
+</head>
+
+<body>
+  <div id="box">
+    <div id="header">
+      <img id="logo" src="logo.png" alt="">
+    </div>
+    <div class="divider"></div>
+    <div id="content">
+      <div id="left-menu">
+        <button id="open-file" onclick="document.querySelector('#file-load').click();">Open File</button>
+        <input id="file-load" type="file" style="display:none" accept="image/*" multiple>
+        <button id="open-directory" onclick="document.querySelector('#directory-load').click();">Open Directory</button>
+        <input id="directory-load" type="file" style="display:none" accept="image/*" webkitdirectory directory>
+        <button id="next-image">Next Image</button>
+        <button id="prev-image">Previous Image</button>
+        <button id="upload-data">S3 Upload</button>
+        <button id="create-training-job">AWS Train</button>
+        <button id="create-endpoint">Create Endpoint</button>
+        <button id="get-predictions">Test Model</button>
+        <button id="clear-predictions">Clear Image</button>
+      </div>
+
+      <div class="slider"></div>
+
+      <div id="right-menu">
+        <div id="labels-menu">
+          <button class="list-title accordion is-open">Annotation Labels</button>
+          <div class="accordion-content">
+            <select multiple="multiple" class="list-items""></select>
+          </div>
+        </div>
+        <div id="file-menu">
+          <button class="list-title accordion is-open">File List</button>
+          <div class="accordion-content">
+            <select multiple="multiple" class="list-items""></select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-modal create-label">
+    <div class="modal-content">
+      <input type="text" class="label-input" placeholder="Object Label">
+      <select multiple="multiple" class="label-list"></select>
+      <button class="cancel-label">Cancel</button>
+      <button class="confirm-label">Select</button>
+    </div>
+  </div>
+
+  <div class="bg-modal training-params">
+    <div class="modal-content">
+      <h4>Invoke Lambda to create Sagemaker training job:</h4>
+      <div>Learning Rate:
+        <select class="param-field learning-rate">
+          <option selected disabled>Learning Rate</option>
+          <option>0.001</option>
+          <option>0.003</option>
+          <option>0.01</option>
+          <option>0.03</option>
+          <option>0.1</option>
+          <option>0.3</option>
+          <option>0.5</option>
+          <option>1</option>
+        </select>
+      </div>
+      <div>Epochs:
+        <select class="param-field epochs">
+          <option selected disabled>Epochs</option>
+          <option>2</option>
+          <option>3</option>
+          <option>5</option>
+          <option>10</option>
+          <option>30</option>
+          <option>50</option>
+          <option>100</option>
+          <option>500</option>
+          <option>1000</option>
+          <option>5000</option>
+          <option>10000</option>
+        </select>
+      </div>
+      <div>Batch Size:
+        <select class="param-field batch-size">
+          <option selected disabled>Batch Size</option>
+          <option>1</option>
+          <option>2</option>
+          <option>4</option>
+          <option>8</option>
+          <option>16</option>
+          <option>32</option>
+          <option>Max</option>
+        </select>
+      </div>
+      <div>Training Job Name:
+        <input type="text" placeholder="Training Job Name" class="param-field training-job-name">
+      </div>
+      <button id="cancel-training-job">Cancel</button>
+      <button id="submit-training-job">Submit</button>
+    </div>
+  </div>
+
+  <div class="bg-modal select-model">
+    <div class="modal-content-small">
+      <div>Select a model:
+        <select class="list-models param-field">
+          <option selected disabled>Model File</option>
+        </select>
+      </div>
+      <div>Endpoint Name:
+        <input type="text" placeholder="Endpoint Name" class="endpoint-name param-field">
+      </div>
+      <button id="cancel-endpoint">Cancel</button>
+      <button id="submit-endpoint">Submit</button>
+    </div>
+  </div>
+
+  <div class="bg-modal make-preds">
+    <div class="modal-content-small">
+      <div>Select Endpoint:
+        <select class="list-endpoints param-field">
+          <option selected disabled>Select Endpoint</option>
+        </select>
+      </div>
+      <div>Confirm Image:
+        <select class="select-image param-field"></select>
+      </div>
+      <div>Threshold Score:
+        <select class="select-threshold param-field">
+          <option selected disabled>Threshold Score</option>
+          <option>0.1</option>
+          <option>0.2</option>
+          <option>0.3</option>
+          <option>0.4</option>
+          <option>0.5</option>
+          <option>0.6</option>
+          <option>0.7</option>
+          <option>0.8</option>
+          <option>0.9</option>
+        </select>
+      </div>
+      <button id="cancel-prediction">Cancel</button>
+      <button id="submit-prediction">Submit</button>
+    </div>
+  </div>
+</body>
+
+</html>
