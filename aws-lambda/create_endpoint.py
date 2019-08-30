@@ -6,11 +6,13 @@ def lambda_handler(event, context):
   sm = boto3.Session().client('sagemaker')
   primary_container = {
       'Image': '811284229777.dkr.ecr.us-east-1.amazonaws.com/object-detection:latest',
-      'ModelDataUrl': 's3://sagemaker-taker-assistant/' + event['modelPath']
+      # 변경: 지역이 us-east-1가 아니면 다른 지역에서 object-detection을 위한 TrainingImage을 붙여넣어야 됩니다.
+
+      'ModelDataUrl': 's3://<버켓 이름>/' + event['modelPath'] #변경
   }
   sm.create_model(
       ModelName=event['endpointName'] + 'Model',
-      ExecutionRoleArn='arn:aws:iam::145936394697:role/AWSGlueServiceSageMakerNotebookRole-Default',
+      ExecutionRoleArn='<sagemaker execution role ARN>', #변경
       PrimaryContainer=primary_container)
 
   endpoint_config_name = event['endpointName'] + 'Config'

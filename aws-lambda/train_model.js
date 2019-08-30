@@ -8,11 +8,12 @@ exports.handler = async (event) => {
     AlgorithmSpecification: {
       TrainingInputMode: 'File',
       TrainingImage: '811284229777.dkr.ecr.us-east-1.amazonaws.com/object-detection:latest'
+      // 변경: 지역이 us-east-1가 아니면 다른 지역에서 object-detection을 위한 TrainingImage을 붙여넣어야 됩니다.
     },
     HyperParameters: {
       base_network: 'resnet-50',
       use_pretrained_model: '1',
-      num_classes: '67',
+      num_classes: '67', //클래스 (object categories)의 수에 맞게 변경할 수 있습니다.
       mini_batch_size: event['batchSize'],
       epochs: event['epochs'],
       learning_rate: event['learningRate'],
@@ -33,7 +34,7 @@ exports.handler = async (event) => {
         DataSource: {
           S3DataSource: {
             S3DataType: 'S3Prefix',
-            S3Uri: 's3://sagemaker-taker-assistant/train',
+            S3Uri: 's3://<버켓 이름>/train', //변경
             S3DataDistributionType: 'FullyReplicated'
           }
         },
@@ -47,7 +48,7 @@ exports.handler = async (event) => {
         DataSource: {
           S3DataSource: {
             S3DataType: 'S3Prefix',
-            S3Uri: 's3://sagemaker-taker-assistant/train_annotation',
+            S3Uri: 's3://<버켓 이름>/train_annotation', //변경
             S3DataDistributionType: 'FullyReplicated'
           }
         },
@@ -61,7 +62,7 @@ exports.handler = async (event) => {
         DataSource: {
           S3DataSource: {
             S3DataType: 'S3Prefix',
-            S3Uri: 's3://sagemaker-taker-assistant/validation',
+            S3Uri: 's3://<버켓 이름>/validation', //변경
             S3DataDistributionType: 'FullyReplicated'
           }
         },
@@ -72,20 +73,20 @@ exports.handler = async (event) => {
         DataSource: {
           S3DataSource: {
             S3DataType: 'S3Prefix',
-            S3Uri: 's3://sagemaker-taker-assistant/validation_annotation',
+            S3Uri: 's3://<버켓 이름>/validation_annotation', //변경
             S3DataDistributionType: 'FullyReplicated'
           }
         },
         ContentType: 'image/jpeg',
       }
     ],
-    OutputDataConfig: { S3OutputPath: 's3://sagemaker-taker-assistant/models' },
+    OutputDataConfig: { S3OutputPath: 's3://<버켓 이름>/models' }, //변경
     ResourceConfig: {
       InstanceCount: 1,
       InstanceType: 'ml.p2.xlarge',
       VolumeSizeInGB: 2
     },
-    RoleArn: 'arn:aws:iam::145936394697:role/AWSGlueServiceSageMakerNotebookRole-Default',
+    RoleArn: '<sagemaker execution role ARN>', //변경
     StoppingCondition: { MaxRuntimeInSeconds: 10000 },
     TrainingJobName: event['trainingJobName']
   };
