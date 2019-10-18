@@ -26,7 +26,7 @@ the inspiration for my object labeling tool. The post can be found at: https://s
 
 1. src 폴더에 aws-config.js이라는 이름의 파일을 생성합니다. 안에 다음과 같은 코드를 붙여넣습니다:<br>
 
-```
+```js
 const bucketRegion = //버켓 지역 (예: 'us-east-1');
 const IdentityPoolId = //cognito identity pool 아이디;
 AWS.config.region = bucketRegion;
@@ -54,6 +54,7 @@ let lambda = new AWS.Lambda({
 <br>
 4. 똑같은 IAM 페이지에서 "Unauth_Role"로 끝나는 역할의 ARN을 페이지 윗단에서 복사합니다. 그후로 S3에 새로운 버켓을 생성하고
 버켓 정체에 다음 정책을 편집해서 넣어줍니다: <br>
+
 ```
 {
     "Version": "2012-10-17",
@@ -71,6 +72,7 @@ let lambda = new AWS.Lambda({
     ]
 }
 ```
+
 <br>
 5. S3버켓의 퍼블릭 액세스 차단을 비활성화 합니다. 그후로 새로 생성한 S3 버켓 이름을 aws-config.js의 s3 변수 안에 들어있는
 "params: { Bucket: ... }"에 파라미터로 넘겨줍니다.
@@ -91,13 +93,15 @@ Cognito에서 만든 Unauth_Role로 세팅해줍니다. (이 역할이 Lambda에
 <br>
 <br>
 9. 혹시나 us-east-1가 아닌 다른 지역에서 S3/Lambda/Cognito Role/Sagemaker를 운영하는 것이라면, Lambda 함수의 trainingImage
-파라미터도 바꿔야 할 것입니다. Training Image 링크를 얻기 위해서 Sagemaker Notebook에 다음 코드를 실행하면 됩니다:
-```
+파라미터도 바꿔야 할 것입니다. Training Image 링크를 얻기 위해서 Sagemaker Notebook에 다음 코드를 실행하면 됩니다:<br>
+
+```py
 import sagemaker
 from sagemaker.amazon.amazon_estimator import get_image_uri
 sess = sagemaker.Session()
 training_image = get_image_uri(sess.boto_region_name, 'object-detection', repo_version="latest")
 print (training_image)
 ```
+
 <br>
 10. label.html을 열면 모든 것이 제대로 작동하길 바랍니다!
